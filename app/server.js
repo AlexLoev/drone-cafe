@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const http = require('http').Server(app);
+const http = require('http');
 const port = process.env.PORT || 1337;
 const bodyparser = require('body-parser');
 const path = require('path');
@@ -30,8 +30,8 @@ app.all('/', (req, res) => {
     // res.statusMessage = 'OK';
 });
 
-// httpServer = http.createServer(app);
-app.listen(port, (err) => {
+httpServer = http.createServer(app);
+httpServer.listen(port, (err) => {
     if (err) {
         log(err);
     } else {
@@ -42,6 +42,5 @@ app.listen(port, (err) => {
 
 module.exports = {
     port,
-    // httpServer
-    app
+    httpServer
 };

@@ -7,7 +7,7 @@ describe('Server functionality', () => {
     let app;
 
     before(done => {
-        app = require('../src/app/server');
+        app = require('../app/server');
         agent = supertest.agent(`http://localhost:${app.port}`);
         done();
     });

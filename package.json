@@ -1,7 +1,7 @@
 {
-  "name": "netology-nd-drone-cafe",
+  "name": "loev-drone-cafe",
   "version": "1.0.0",
-  "description": "В рамках дипломного проект необходимо разработать систему автоматизации ресторана, в котором вместо официантов используются автономные дроны, а заказ размещается через простое веб-приложение.",
+  "description": "Система автоматизации ресторана, в котором вместо официантов используются автономные дроны, а заказ размещается через простое веб-приложение.",
   "main": "index.js",
   "scripts": {
     "test": "mocha tests",
@@ -9,18 +9,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.org/netology-university/drone-cafe.git"
+    "url": "https://github.com/AlexLoev/drone-cafe"
   },
   "keywords": [],
-  "author": "Dima Fitiskin <dfitiskin@gmail.com>",
+  "author": "Alex Loev <alexloev1988@gmail.com>",
   "license": "MIT",
-  "homepage": "https://bitbucket.org/netology-university/drone-cafe#readme",
+  "homepage": "https://loev-drone-cafe.herokuapp.com/",
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "netology-fake-drone-api": "^1.0.1"
   },
-  "private": true,
   "devDependencies": {
     "chai": "^4.1.2",
     "mocha": "^5.0.5",
