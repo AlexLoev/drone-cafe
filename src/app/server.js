@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const http = require('http');
-const port = process.env.port || 1337;
+const port = process.env.PORT || 1337;
 const bodyparser = require('body-parser');
 const log = console.log;
 
