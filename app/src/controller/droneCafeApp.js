@@ -1,7 +1,7 @@
 angular
     .module('droneCafeApp', ['ngRoute', 'ngMaterial', 'ngMessages'])
-    .config(['$routeProvider',
-        function config($routeProvider) {
+    .config(['$routeProvider', '$mdThemingProvider',
+        function config($routeProvider, $mdThemingProvider) {
             $routeProvider.
                 when('/users', {
                     template: '<user-list></user-list>'
@@ -21,17 +21,14 @@ angular
                 redirectTo: '/'
             }); */
             
+            // Configure a dark theme with primary foreground yellow
+            $mdThemingProvider.theme('docs-dark', 'default')
+                .primaryPalette('yellow')
+                // .accentPalette('blue')
+                // .backgroundPalette('blue')
+                .dark();
         }
     ])
     .controller('DemoCtrl', function ($scope) {
-
-    })
-    .config(function ($mdThemingProvider) {
-
-        // Configure a dark theme with primary foreground yellow
-
-        $mdThemingProvider.theme('docs-dark', 'default')
-            .primaryPalette('yellow')
-            .dark();
 
     });
