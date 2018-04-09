@@ -6,14 +6,14 @@ const bodyparser = require('body-parser');
 const path = require('path');
 const log = console.log;
 
-const users = require(path.join(__dirname,'src', 'controller', 'users')); //подключаем методы для работы с пользователями
-const chefs = require(path.join(__dirname,'src', 'controller', 'chefs')); //подключаем методы для работы с поварами
+const users = require('./src/controller/users'); //подключаем методы для работы с пользователями
+const kitchen = require('./src/controller/kitchen'); //подключаем методы для работы с поварами
 
 const routerusers = express.Router();
 const routerchefs = express.Router();
 app.use(express.static(path.join(__dirname,'public'))); //открываем публичный доступ к необходимым файлам (css/js/img)
 app.use(express.static(path.join(__dirname,'src','view'))); //доступ к html
-app.use(express.static(path.join(__dirname,'src','controller'))); //доступ к controllers
+// app.use(express.static(path.join(__dirname,'src','controller'))); //доступ к controllers
 
 //подключаем к нашему приложению возможность разбирать json и urlencoded body in request
 app.use(bodyparser.json());
@@ -29,6 +29,12 @@ app.all('/', (req, res) => {
     // res.statusCode = 200;
     // res.statusMessage = 'OK';
 });
+
+routerusers.get('/', users.getuserslist);
+routerusers.post('/', users.newuser);
+routerusers.get('/:id', users.findbyid);
+routerusers.delete('/:id', users.removebyid);
+routerusers.put('/:id', users.edituser);
 
 httpServer = http.createServer(app);
 httpServer.listen(port, (err) => {
