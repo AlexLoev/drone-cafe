@@ -36,12 +36,12 @@ angular
         //     email: 'kidd@mail.com'
         // };
         $scope.signin = () => {
-            console.log('sign it', User);
+            console.log('sign it',$scope.user);
 
             User.newuser($scope.user);
         };
         console.log('RestangularOne');
-        Restangular.one('user', $routeParams['userId']).get().then(function(response) {
-            $scope.user = response
-        });
+        // Restangular.one('user', $routeParams['userId']).get().then(function(response) {
+        //     $scope.user = response
+        // });
     });

@@ -9,35 +9,42 @@ const UserSchema = new Schema({
 });
 
 UserSchema.statics.insertnew = function (newuser) {
-    log('insert new user', newuser);
+    // log('insert new user', newuser);
     return new Promise((resolve, reject) => {
         var user = this(newuser);
-        /**нужно добавить поиск по email */
-        // user.find({email: "kidd@mail.com"})
-        // .then(resolve => log(resolve))
-        // .catch(err => log(err));
-
-        user.save((err, res) => {
-            if (err) {
-                log('insert err', err)
-                reject(err);
-            } else {
-                log('inserted', res);
-                resolve(res);
-            }
-        });
+        this.find({ email: newuser.email })
+            .then(found => {
+                if (found) {
+                    reject(found);
+                } else {
+                    user.save((err, res) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(res);
+                        }
+                    });
+                };
+            })
+            .catch(err => {
+                log(err);
+                reject(err)
+            });
     });
 };
 
 UserSchema.statics.findbyjson = function (userjson) {
     log('findbyjson', userjson)
-    this.find(userjson, (err, user) => {
-        if (err) {
-            log(err);
-        } else {
-            log('found', user);
-            return user
-        };
+    return new Promise((resolve, reject) => {
+        this.find(userjson, (err, user) => {
+            if (err) {
+                log(err);
+                reject(err);
+            } else {
+                log('found', user);
+                resolve(user)
+            };
+        });
     });
 };
 

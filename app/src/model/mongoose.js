@@ -6,7 +6,7 @@ mongoose.connect(uri,(err, db) => {
     if (err) {
         log(err)
     } else {
-        log(`mongoose connected at port ${db.port}`)
+        log(`mongoose connected at port ${db.port}`);
     }
 });
 
