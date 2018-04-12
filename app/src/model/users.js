@@ -14,38 +14,53 @@ UserSchema.statics.insertnew = function (newuser) {
         var user = this(newuser);
         this.find({ email: newuser.email })
             .then(found => {
-                if (found) {
-                    reject(found);
+                // log('found', found.length);
+                // Array.length
+                if (found && found.length) {
+                    // log('found', found);
+                    resolve([1, found])
                 } else {
                     user.save((err, res) => {
                         if (err) {
-                            reject(err);
+                            throw reject;
                         } else {
-                            resolve(res);
+                            // log('save', res);
+                            resolve([0, res]);
                         }
                     });
                 };
             })
             .catch(err => {
-                log(err);
+                // log('findcatch',err);
+                // throw reject;
                 reject(err)
             });
     });
 };
 
-UserSchema.statics.findbyjson = function (userjson) {
-    log('findbyjson', userjson)
+UserSchema.statics.removebyemail = function(email) {
     return new Promise((resolve, reject) => {
-        this.find(userjson, (err, user) => {
+        this.findOne({email: email}, (err, user) => {
             if (err) {
-                log(err);
-                reject(err);
+                // log('findByemail',err);
+                reject(err)
             } else {
-                log('found', user);
-                resolve(user)
+                if (user) {
+                    // log('rememfind', user);
+                    user.remove((err, delres) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            // log('deleted', delres);
+                            resolve(delres);
+                        }   
+                    });
+                } else {
+                    resolve('Not matched user to remove');
+                };
             };
         });
-    });
+    });    
 };
 
 var User = mongoose.model('users', UserSchema);

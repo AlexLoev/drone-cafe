@@ -5,16 +5,31 @@ const log = console.log;
 const routerusers = express.Router();
 routerusers.get('/', getuserslist);
 routerusers.post('/', newuser);
-routerusers.get('/:id', findbyjson);
-routerusers.delete('/:id', removebyid);
+routerusers.get('/:id', findbyid);
+routerusers.delete('/:email', removebyemail);
 routerusers.put('/:id', edituser);
 
 /** создает нового пользователя по запросу */
 function newuser(req, res) {
     if (req.body.name && req.body.email) {
         User.insertnew(req.body)
-            .then(resolve => { res.json(resolve) })
-            .catch(err => _dberr(err, res));
+            .then(resolve => {
+                /**resolve представлен в виде массива [found, user]
+                 * found = 1 если в БД уже есть такой Email
+                 * user = json объект с данными пользователя
+                 */
+                // log('insertnew resolve',resolve);
+                if (resolve[0] != 1) {
+                    res.json(resolve)
+                } else {
+                    res.statusCode = 403;
+                    res.end(`Email already exist`);
+                }
+            })
+            .catch(err => {
+                // log('newuser catch', err);
+                _dberr(err, res)
+            });
     } else {
         res.statusCode = 400;
         res.end(`Please, add a correct user JSON in body {name,email}`);
@@ -22,12 +37,17 @@ function newuser(req, res) {
 };
 
 function getuserslist(req, res) {
-    log('userlist', req);
+    User.find()
+        .then(resolve => {
+            // log('userlist: \n', resolve)
+            res.json(resolve)
+        })
+        .catch(err => _dberr(err, res));
 };
 
-function findbyjson(req, res) {
+function findbyid(req, res) {
     if (req.body) {
-        User.findbyjson(req.body)
+        User.find(req.body)
             .then(resolve => { res.json(resolve) })
             .catch(err => _dberr(err, res));
     } else {
@@ -36,8 +56,16 @@ function findbyjson(req, res) {
     }
 };
 
-function removebyid(req, res) {
-    log('removebyid', req);
+function removebyemail(req, res) {
+    // log('removebyemail');
+    if (req.params.email) {
+        User.removebyemail(req.params.email)
+            .then(resolve => { res.json(resolve) })
+            .catch(err => _dberr(err, res));
+    } else {
+        res.statusCode = 400;
+        res.end('Please, enter a valid user id');
+    }
 };
 
 function edituser(req, res) {
@@ -46,6 +74,7 @@ function edituser(req, res) {
 
 /**системная функция для формирования единого ответа на ошибки в БД */
 function _dberr(err, res) {
+    // log('dberror');
     res.statusCode = 500;
     res.statusMessage = err;
     res.end('MongoDB Error in users collection');

@@ -31,30 +31,49 @@ describe('Server functionality', () => {
     });
 
     describe('Users API', () => {
-        it('should create users by post "\\users\\"', done => {
+        it('should return userlist on "GET \\users\\"', done => {
+            agent
+                .get('/users')
+                .expect(200)
+                .end(function (err, res) {
+                    err ? done(err) : done();
+                });
+        });
+
+
+        it('should create user on "POST \\users\\"', done => {
             agent
                 .post('/users')
                 .send({
-                    name: "loev3",
-                    email: "mm@mm"
+                    name: "test",
+                    email: "test@test"
                 })
                 .expect(200)
                 .end(function (err, res) {
                     err ? done(err) : done();
                 });
         });
-        // it('should return userid by posting existing email on "\\users\\"', done => {
-        //     agent
-        //         .post('/users')
-        //         .send({
-        //             name: "loev",
-        //             email: "mm@mm"
-        //         })
-        //         .expect(200)
-        //         .end(function (err, res) {
-        //             err ? done(err) : done();
-        //         });
-        // });
+        it('should return 403 Forbidden by existing email on "POST \\users\\"', done => {
+            agent
+                .post('/users')
+                .send({
+                    name: "test",
+                    email: "test@test"
+                })
+                .expect(403)
+                .end(function (err, res) {
+                    err ? done(err) : done();
+                });
+        });
+        it('should remove users by email on "DELETE \\users\\test@test"', done => {
+            agent
+                .delete('/users/test@test')
+                .expect(200)
+                .end(function (err, res) {
+                    err ? done(err) : done();
+                });
+        });
+
     });
     after(() => {
         app.httpServer.close();
