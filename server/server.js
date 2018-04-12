@@ -6,12 +6,10 @@ const bodyparser = require('body-parser');
 const path = require('path');
 const log = console.log;
 
-const routerusers = require('./src/controller/users'); //подключаем роуты для работы с пользователями
-const routerkitchen = require('./src/controller/kitchen'); //подключаем роуты для работы с поварами
+const routerusers = require('./routers/users'); //подключаем роуты для работы с пользователями
+const routerkitchen = require('./routers/kitchen'); //подключаем роуты для работы с поварами
 
-app.use(express.static(path.join(__dirname,'public'))); //открываем публичный доступ к необходимым файлам (css/js/img)
-app.use(express.static(path.join(__dirname,'src','view'))); //доступ к html
-// app.use(express.static(path.join(__dirname,'src','controller'))); //доступ к controllers
+app.use(express.static('server/app')); //открываем публичный доступ к файлам приложения
 
 //подключаем к нашему приложению возможность разбирать json и urlencoded body in request
 app.use(bodyparser.json());
@@ -21,11 +19,8 @@ app.use(bodyparser.urlencoded({ extended: true }));
 app.use('/users/', routerusers);
 app.use('/kitchen/', routerkitchen);
 
-app.all('/', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile('index.html')
-    // res.end('Server is working correctly');
-    // res.statusCode = 200;
-    // res.statusMessage = 'OK';
 });
 
 httpServer = http.createServer(app);

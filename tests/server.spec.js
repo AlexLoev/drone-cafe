@@ -8,9 +8,9 @@ describe('Server functionality', () => {
     let mongoose;
 
     before(done => {
-        app = require('../app/server');
+        app = require('../server/server');
         agent = supertest.agent(`http://localhost:${app.port}`);
-        mongoose = require('../app/src/model/mongoose');
+        mongoose = require('../server/db/mongoose');
         done();
     });
 
