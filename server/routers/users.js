@@ -5,7 +5,7 @@ const log = console.log;
 const routerusers = express.Router();
 routerusers.get('/', getuserslist);
 routerusers.post('/', newuser);
-routerusers.get('/:id', findbyid);
+routerusers.get('/:email', findbyemail);
 routerusers.delete('/:email', removebyemail);
 routerusers.put('/:id', edituser);
 
@@ -37,6 +37,7 @@ function newuser(req, res) {
 };
 
 function getuserslist(req, res) {
+    log('getuserlist')
     User.find()
         .then(resolve => {
             // log('userlist: \n', resolve)
@@ -45,9 +46,10 @@ function getuserslist(req, res) {
         .catch(err => _dberr(err, res));
 };
 
-function findbyid(req, res) {
-    if (req.body) {
-        User.find(req.body)
+function findbyemail(req, res) {
+    log('findbyemail', req.params.email);
+    if (req.params.email) {
+        User.findOne({email: req.params.email})
             .then(resolve => { res.json(resolve) })
             .catch(err => _dberr(err, res));
     } else {

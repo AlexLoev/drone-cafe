@@ -1,5 +1,5 @@
-angular
-    .module('CafeApp', ['ngRoute', 'restangular', 'ngMaterial', 'ngMessages'])
+var CafeApp = angular.module('CafeApp', ['ngRoute', 'restangular', 'ngMaterial', 'ngMessages'])
+angular.module('CafeApp')
     .config(['$routeProvider', 'RestangularProvider', '$mdThemingProvider',
         function config($routeProvider, RestangularProvider, $mdThemingProvider) {
             $routeProvider.
@@ -7,7 +7,7 @@ angular
                     template: '<user-list></user-list>'
                 }).
                 when('/users/:userId', {
-                    template: '<user-detail></user-detail>'
+                    template: '<user-page></user-page>'
                 }).
                 when('/edit/:userId', {
                     templateUrl: 'src/EditUser/EditUser.html',
@@ -29,19 +29,14 @@ angular
                 // .backgroundPalette('blue')
                 .dark();
         }
-    ])
-    .controller('CafeCtrl', function ($scope, Restangular, $routeParams) {
-        // $scope.user = {
-        //     name: 'Kidd',
-        //     email: 'kidd@mail.com'
-        // };
-        $scope.signin = () => {
-            console.log('sign it',$scope.user);
+    ]);
+    // .controller('CafeCtrl', function ($scope, Restangular, $routeParams) {
+    //     $scope.user = {
+    //         loaded: false
+    //     };
 
-            User.newuser($scope.user);
-        };
-        console.log('RestangularOne');
-        // Restangular.one('user', $routeParams['userId']).get().then(function(response) {
-        //     $scope.user = response
-        // });
-    });
+    //     console.log($scope.user);
+    //     Restangular.one('user', $routeParams['userId']).get().then(function(response) {
+    //         $scope.user = response
+    //     });
+    // });

@@ -10,28 +10,8 @@
 </head>
 
 <body>
-    <md-content md-theme="docs-dark" layout-padding>
-        <h1 class="md-display-2">Drone Cafe</h1>
-        <h3 class="md-subhead">By Alex Loev</h3>
-    </md-content>
-    <div ng-controller="CafeCtrl" layout="column" ng-cloak class="md-inline-form">
-        <md-content md-theme="docs-dark" layout-padding>
-            <div>
-                <form name="userForm">
-                    <md-input-container layout-gt-sm="row">  
-                        <label>Имя</label>
-                        <input ng-model="user.name" ng-required="true">
-                    </md-input-container>
-
-                    <md-input-container layout-gt-sm="row"> 
-                        <label>E-mail</label>
-                        <input ng-model="user.email" type="email" ng-required="true">
-                    </md-input-container>
-                    <md-button class="md-primary" ng-click="signin()">Войти</md-button>
-                </form>
-            </div>
-        </md-content>
-    </div>
+    <auth-page></auth-page>
+    <ng-view></ng-view>
     <!-- Angular Material requires Angular.js -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.min.js"></script>
@@ -48,6 +28,8 @@
     <!-- <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/restangular/1.5.1/restangular.min.js"></script> -->
     <!-- Adding app controller -->
     <script src="src/CafeApp.js"></script>
+    <script src="src/authPage/authPageComponent.js"></script>
+    <script src="src/userPage/userPageComponent.js"></script>
 </body>
 
 </html>
