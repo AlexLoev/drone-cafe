@@ -1,12 +1,9 @@
 CafeApp.component('userPage', {
-    controller: function userCtrl($scope, $http) {
+    controller: function userCtrl($scope, $http, UsersService) {
         // $scope.user.loaded = true;
-        console.log('userCtrl', this);
         const ctrl = this;
-        $http.get('public/menu.json')
-            .then(function (res) {
-                ctrl.menu = res.data;
-            });
+        ctrl.user = UsersService.curUsr;
+
     },
     templateUrl: 'src/userPage/userPage.html'
 })
