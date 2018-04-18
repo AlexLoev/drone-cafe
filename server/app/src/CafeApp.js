@@ -3,8 +3,8 @@ angular.module('CafeApp')
     .config(['$routeProvider', 'RestangularProvider', '$mdThemingProvider',
         function config($routeProvider, RestangularProvider, $mdThemingProvider) {
             $routeProvider.
-                when('/users', {
-                    template: '<user-list></user-list>'
+                when('/', {
+                    template: '<auth-page></auth-page>'
                 }).
                 when('/users/:userId', {
                     template: '<user-page></user-page>'

@@ -1,8 +1,8 @@
 CafeApp.component('authPage', {
-    controller: function authCtrl($location, $http, $mdToast, UsersService) {
+    controller: function authCtrl($scope, UsersService) {
         // console.log(UsersService);
         const ctrl = this;
-        ctrl.user = {
+        $scope.user = {
             name: "Alex",
             email: "alexloev@gmail.com",
             profile: "Клиент",
@@ -11,9 +11,10 @@ CafeApp.component('authPage', {
         ctrl.profiles = UsersService.profiles;
         // console.log('authCtrl', this);
         ctrl.signin = () => {
-            UsersService.signin(this.user)
+            UsersService.signin($scope.user)
             .then(user => {
-                ctrl.user = user
+                console.log('authPage signin', user)
+                $scope.user = user
                 UsersService.curUsr = user
             });
         } 

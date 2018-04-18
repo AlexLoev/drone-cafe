@@ -80,7 +80,10 @@ function edituser(req, res) {
 function addbalance(req, res) {
     log('addbalance', req.params)
     if (req.params.email) {
-        User.findOneAndUpdate({ email: req.params.email }, { $inc: { balance: 50 } })
+        User.findOneAndUpdate(
+            { email: req.params.email },
+            { $inc: { balance: 100 } },
+            { new: true })
             .then(resolve => {
                 log('balance updated', resolve);
                 res.json(resolve)

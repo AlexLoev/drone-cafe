@@ -19,14 +19,15 @@ angular
                     let path = 'users/' + user.email
                     $http.post('users/', user)
                         .then(res => {
-                            // console.log(res);
                             if (res.data) {
                                 user = res.data;
                                 user.loaded = true
+                                console.log('UsersService signin resolve user loaded', user);
+                                
                                 toast('Привет, пользователь ' + user.name, 2000);
-                                $location.path(path);
                                 curUsr = user;
                                 resolve(user);
+                                $location.path(path);
                             } else {
                                 toast('Nothing found by this email ' + user.email, 2000);
                             }

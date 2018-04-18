@@ -1,4 +1,4 @@
-<div ng-if="!$ctrl.user.loaded">
+<div ng-if="!user.loaded">
     <md-content md-theme="docs-dark" layout-padding>
         <h1 class="md-display-2">Drone Cafe</h1>
         <!-- <h3 class="md-subhead">By Alex Loev</h3> -->
@@ -9,17 +9,17 @@
                 <form name="userForm">
                     <md-input-container layout-gt-sm="row">
                         <label>Имя</label>
-                        <input ng-model="$ctrl.user.name" ng-required="true">
+                        <input ng-model="user.name" ng-required="true">
                     </md-input-container>
 
                     <md-input-container layout-gt-sm="row">
                         <label>E-mail</label>
-                        <input ng-model="$ctrl.user.email" type="email" ng-required="true">
+                        <input ng-model="user.email" type="email" ng-required="true">
                     </md-input-container>
 
                     <md-input-container layout-gt-sm="row">
                         <label>Профиль</label>
-                        <md-select ng-model="$ctrl.user.profile" ng-required="true">
+                        <md-select ng-model="user.profile" ng-required="true">
                             <md-option ng-value="opt" ng-repeat="opt in $ctrl.profiles">{{ opt }}</md-option>
                         </md-select>
                     </md-input-container>
