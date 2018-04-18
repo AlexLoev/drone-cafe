@@ -5,21 +5,24 @@ const ObjectID = mongoose.Types.ObjectID;
 
 const UserSchema = new Schema({
     name: String,
-    email: String
+    email: String,
+    balance: Number,
+    profile: String
 });
 
 UserSchema.statics.insertnew = function (newuser) {
     // log('insert new user', newuser);
     return new Promise((resolve, reject) => {
         var user = this(newuser);
-        this.find({ email: newuser.email })
+        this.findOne({ email: newuser.email })
             .then(found => {
                 // log('found', found.length);
                 // Array.length
-                if (found && found.length) {
+                if (found) {
                     // log('found', found);
                     resolve([1, found])
                 } else {
+                    user.balance = 100;
                     user.save((err, res) => {
                         if (err) {
                             throw reject;

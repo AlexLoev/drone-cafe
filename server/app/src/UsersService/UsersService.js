@@ -2,6 +2,7 @@ angular
     .module('CafeApp')
     .factory('UsersService', function ($http, $location, $mdToast) {
         let curUsr;
+        let profiles = ['Клиент', 'Повар']
         // console.log('usersService');
         function toast(text, delay) {
             $mdToast.show(
@@ -12,13 +13,11 @@ angular
             );
         };
         function signin(user) {
-            console.log('usserv signin', user);
+            // console.log('usserv signin', user);
             return new Promise((resolve, reject) => {
-
-                if (user.name && user.email) {
-
+                if (user.name && user.email && user.profile) {
                     let path = 'users/' + user.email
-                    $http.get(path)
+                    $http.post('users/', user)
                         .then(res => {
                             // console.log(res);
                             if (res.data) {
@@ -36,9 +35,9 @@ angular
                             toast(err, 2000);
                         });
                 } else {
-                    toast('Required field are empty', 2000);
+                    toast('Required fields are empty', 2000);
                 }
             });
         };
-        return { curUsr, signin, toast };
+        return { curUsr, signin, toast, profiles };
     });

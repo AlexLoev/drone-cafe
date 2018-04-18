@@ -11,6 +11,7 @@ routerusers.put('/:id', edituser);
 
 /** создает нового пользователя по запросу */
 function newuser(req, res) {
+    log('newuser db', req.body);
     if (req.body.name && req.body.email) {
         User.insertnew(req.body)
             .then(resolve => {
@@ -18,13 +19,14 @@ function newuser(req, res) {
                  * found = 1 если в БД уже есть такой Email
                  * user = json объект с данными пользователя
                  */
-                // log('insertnew resolve',resolve);
-                if (resolve[0] != 1) {
-                    res.json(resolve)
-                } else {
-                    res.statusCode = 403;
-                    res.end(`Email already exist`);
-                }
+                log('insertnew resolve',resolve[1]);
+                res.json(resolve[1]);
+                // if (resolve[0] != 1) {
+                //     res.json(resolve)
+                // } else {
+                //     res.statusCode = 403;
+                //     res.end(`Email already exist`);
+                // }
             })
             .catch(err => {
                 // log('newuser catch', err);
