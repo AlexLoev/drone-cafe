@@ -31,9 +31,7 @@ angular
                                 toast('Nothing found by this email ' + user.email, 2000);
                             }
                         })
-                        .catch(err => {
-                            toast(err, 2000);
-                        });
+                        .catch(err => { toast(err, 2000) });
                 } else {
                     toast('Required fields are empty', 2000);
                 }

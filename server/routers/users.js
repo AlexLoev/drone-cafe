@@ -8,6 +8,7 @@ routerusers.post('/', newuser);
 routerusers.get('/:email', findbyemail);
 routerusers.delete('/:email', removebyemail);
 routerusers.put('/:id', edituser);
+routerusers.put('/balance/:email', addbalance);
 
 /** создает нового пользователя по запросу */
 function newuser(req, res) {
@@ -19,7 +20,7 @@ function newuser(req, res) {
                  * found = 1 если в БД уже есть такой Email
                  * user = json объект с данными пользователя
                  */
-                log('insertnew resolve',resolve[1]);
+                log('insertnew resolve', resolve[1]);
                 res.json(resolve[1]);
                 // if (resolve[0] != 1) {
                 //     res.json(resolve)
@@ -51,7 +52,7 @@ function getuserslist(req, res) {
 function findbyemail(req, res) {
     log('findbyemail', req.params.email);
     if (req.params.email) {
-        User.findOne({email: req.params.email})
+        User.findOne({ email: req.params.email })
             .then(resolve => { res.json(resolve) })
             .catch(err => _dberr(err, res));
     } else {
@@ -74,6 +75,21 @@ function removebyemail(req, res) {
 
 function edituser(req, res) {
     log('edituser', req);
+}
+
+function addbalance(req, res) {
+    log('addbalance', req.params)
+    if (req.params.email) {
+        User.findOneAndUpdate({ email: req.params.email }, { $inc: { balance: 50 } })
+            .then(resolve => {
+                log('balance updated', resolve);
+                res.json(resolve)
+            })
+            .catch(err => _dberr(err, res));
+    } else {
+        res.statusCode = 400;
+        res.end(`Please, add a correct user JSON in body {email, balance}`);
+    }
 }
 
 /**системная функция для формирования единого ответа на ошибки в БД */

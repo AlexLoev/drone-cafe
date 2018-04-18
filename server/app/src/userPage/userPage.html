@@ -1,6 +1,10 @@
 <div ng-if="$ctrl.user.loaded">
     <md-content md-theme="docs-dark" layout-padding>
-        <h1 class="md-display-1" layout-gt-sm="row">{{$ctrl.user.name}} ({{$ctrl.user.balance || 0}} кредитов)</h1>
+        <h1>{{$ctrl.user.name}}</h1>
+        <p>
+            Баланс: {{$ctrl.user.balance || 0}} кредитов
+            <md-button class="md-primary" ng-click="$ctrl.getmoney()">Пополнить</md-button>
+        </p>
     </md-content>
     <menu-page></menu-page>
-</div>    
+</div>
