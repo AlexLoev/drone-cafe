@@ -1,23 +1,23 @@
-<div ng-if="!user.loaded">
+<div ng-if="!user.loaded" layout="column">
     <md-content md-theme="docs-dark" layout-padding>
         <h1 class="md-display-2">Drone Cafe</h1>
         <!-- <h3 class="md-subhead">By Alex Loev</h3> -->
     </md-content>
-    <div layout="column" ng-cloak class="md-inline-form">
+    <div ng-cloak class="md-inline-form">
         <md-content md-theme="docs-dark" layout-padding>
             <div>
-                <form name="userForm">
-                    <md-input-container layout-gt-sm="row">
+                <form name="userForm" layout="column">
+                    <md-input-container>
                         <label>Имя</label>
                         <input ng-model="user.name" ng-required="true">
                     </md-input-container>
 
-                    <md-input-container layout-gt-sm="row">
+                    <md-input-container>
                         <label>E-mail</label>
                         <input ng-model="user.email" type="email" ng-required="true">
                     </md-input-container>
 
-                    <md-input-container layout-gt-sm="row">
+                    <md-input-container>
                         <label>Профиль</label>
                         <md-select ng-model="user.profile" ng-required="true">
                             <md-option ng-value="opt" ng-repeat="opt in $ctrl.profiles">{{ opt }}</md-option>
