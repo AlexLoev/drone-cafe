@@ -9,17 +9,9 @@ angular.module('CafeApp')
                 when('/users/:userId', {
                     template: '<user-page></user-page>'
                 }).
-                when('/edit/:userId', {
-                    templateUrl: 'src/EditUser/EditUser.html',
-                    controller: 'EditUserCtrl'
-                }).
-                when('/create', {
-                    templateUrl: 'src/CreateUser/CreateUser.html',
-                    controller: 'CreateUserCtrl'
-                })/* .
-            otherwise({
-                redirectTo: '/'
-            }); */
+                otherwise({
+                    redirectTo: '/'
+                });
             RestangularProvider.setBaseUrl('/users/');
             // RestangularProvider.setBaseUrl('https://api.backendless.com/v1/data/');
             // Configure a dark theme with primary foreground yellow

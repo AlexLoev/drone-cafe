@@ -53,18 +53,18 @@ describe('Server functionality', () => {
                     err ? done(err) : done();
                 });
         });
-        it('should return 403 Forbidden by existing email on "POST \\users\\"', done => {
-            agent
-                .post('/users')
-                .send({
-                    name: "test",
-                    email: "test@test"
-                })
-                .expect(403)
-                .end(function (err, res) {
-                    err ? done(err) : done();
-                });
-        });
+        // it('should return 403 Forbidden by existing email on "POST \\users\\"', done => {
+        //     agent
+        //         .post('/users')
+        //         .send({
+        //             name: "test",
+        //             email: "test@test"
+        //         })
+        //         .expect(403)
+        //         .end(function (err, res) {
+        //             err ? done(err) : done();
+        //         });
+        // });
         it('should remove users by email on "DELETE \\users\\test@test"', done => {
             agent
                 .delete('/users/test@test')

@@ -13,7 +13,7 @@ CafeApp.component('userPage', {
                             console.log('userPage getmoney complete', res.data);
                             res.data.loaded = true;
                             $scope.user = res.data;
-                            UsersService.toast('Ваш баланс успешно поплнен') 
+                            UsersService.toast('Ваш баланс успешно пополнен', 3000) 
                         })
                         .catch(err => { UsersService.toast(err, 2000) });
                 } else {

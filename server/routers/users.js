@@ -1,14 +1,16 @@
 const express = require('express');
 const User = require('../db/users');
+const Order = require('../db/orders');
 const log = console.log;
 
 const routerusers = express.Router();
 routerusers.get('/', getuserslist);
-routerusers.post('/', newuser);
 routerusers.get('/:email', findbyemail);
-routerusers.delete('/:email', removebyemail);
+routerusers.post('/', newuser);
+routerusers.post('/:id/orders/', addorder);
 routerusers.put('/:id', edituser);
 routerusers.put('/balance/:email', addbalance);
+routerusers.delete('/:email', removebyemail);
 
 /** создает нового пользователя по запросу */
 function newuser(req, res) {
@@ -94,6 +96,22 @@ function addbalance(req, res) {
         res.end(`Please, add a correct user JSON in body {email, balance}`);
     }
 }
+
+function addorder(req, res) {
+    log('addorder', req.params)
+    if (req.params.id) {
+        Order.insertnew(userid, item)
+            .then(resolve => {
+                log('addorder success', resolve);
+                res.json(resolve)
+            })
+            .catch(err => _dberr(err, res));
+    } else {
+        res.statusCode = 400;
+        res.end(`Please, add a correct user ID`);
+    }
+}
+
 
 /**системная функция для формирования единого ответа на ошибки в БД */
 function _dberr(err, res) {
