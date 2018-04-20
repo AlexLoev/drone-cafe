@@ -9,8 +9,6 @@ const log = console.log;
 const routerusers = require('./routers/users'); //подключаем роуты для работы с пользователями
 const routerkitchen = require('./routers/kitchen'); //подключаем роуты для работы с поварами
 
-app.use(express.static('server/app')); //открываем публичный доступ к файлам приложения
-
 //подключаем к нашему приложению возможность разбирать json и urlencoded body in request
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
@@ -18,10 +16,6 @@ app.use(bodyparser.urlencoded({ extended: true }));
 //подключаем роуты
 app.use('/users/', routerusers);
 app.use('/kitchen/', routerkitchen);
-
-app.get('/', (req, res) => {
-    res.sendFile('index.html')
-});
 
 httpServer = http.createServer(app);
 httpServer.listen(port, (err) => {
@@ -34,6 +28,6 @@ httpServer.listen(port, (err) => {
 
 
 module.exports = {
-    port,
+    app,
     httpServer
 };

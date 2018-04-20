@@ -2,7 +2,7 @@ CafeApp.component('menuPage', {
     controller: function menuCtrl($http, OrdersService) {
         const ctrl = this;
         // console.log('menuCtrl', this);
-        $http.get('public/menu.json')
+        $http.get('assets/menu.json')
             .then(function (res) {
                 ctrl.menu = res.data;
             });

@@ -1,5 +1,8 @@
+const express = require('express');
 /**стартуем сервер */
-var server = require('./server/server');
-/**подключаем клиент БД 
- * var mongoose = require('./server/db/mongoose');
-*/
+var app = require('./server/server').app
+
+app.use(express.static('app')); //открываем публичный доступ к файлам приложения
+app.get('/', (req, res) => {
+    res.sendFile('index.html')
+});
