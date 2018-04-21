@@ -28,6 +28,7 @@ httpServer.listen(port, (err) => {
 
 
 module.exports = {
+    port,
     app,
     httpServer
 };

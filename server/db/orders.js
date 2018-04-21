@@ -9,6 +9,7 @@ const OrderSchema = new Schema({
     title: String,
     ingredients: Array,
     price: Number,
+    quant: Number,
     status: String,
     dateadd: Date,
     deleted: Date
@@ -19,12 +20,8 @@ OrderSchema.statics.insertnew = function (userid, item) {
     return new Promise((resolve, reject) => {
         try {
             if (userid && item) {
-                var order = this();
+                var order = this(item);
                 order.userid = userid;
-                order.itemid = item.id;
-                order.title = item.title;
-                order.ingredients = item.ingredients;
-                order.price = item.price;
                 order.status = 'Заказано';
                 order.dateadd = new Date();
                 order.save()

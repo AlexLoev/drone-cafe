@@ -99,13 +99,16 @@ function addbalance(req, res) {
 
 function addorder(req, res) {
     log('addorder', req.params)
-    if (req.params.id) {
-        Order.insertnew(userid, item)
-            .then(resolve => {
-                log('addorder success', resolve);
-                res.json(resolve)
-            })
-            .catch(err => _dberr(err, res));
+    if (req.params.id && req.body && req.body.length) {
+        log(req.body);
+        req.body.forEach(item => {
+            Order.insertnew(req.params.id, item)
+                .then(resolve => {
+                    log('addorder success', resolve);
+                })
+                .catch(err => _dberr(err, res));
+        })
+        res.json('addorder success')
     } else {
         res.statusCode = 400;
         res.end(`Please, add a correct user ID`);

@@ -14,9 +14,9 @@ describe('Server functionality', () => {
         done();
     });
 
-    it('Answer for simple request to root "/"', done => {
+    it('Answer for simple request to users "/users"', done => {
         agent
-            .get('/')
+            .get('/users')
             .expect(200)
             .end(function (err, res) {
                 err ? done(err) : done();

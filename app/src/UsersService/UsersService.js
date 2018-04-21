@@ -1,6 +1,6 @@
 angular
     .module('CafeApp')
-    .factory('UsersService', function ($http, $location, $mdToast) {
+    .factory('UsersService', function ($http, $mdToast) {
         let curUsr;
         let profiles = ['Клиент', 'Повар']
         // console.log('usersService');
@@ -27,7 +27,6 @@ angular
                                 toast('Привет, пользователь ' + user.name, 2000);
                                 curUsr = user;
                                 resolve(user);
-                                $location.path(path);
                             } else {
                                 toast('Nothing found by this email ' + user.email, 2000);
                             }
