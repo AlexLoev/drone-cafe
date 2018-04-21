@@ -6,6 +6,7 @@ const log = console.log;
 const routerusers = express.Router();
 routerusers.get('/', getuserslist);
 routerusers.get('/:id', findbyid);
+routerusers.get('/:id/orders/', getorderslist);
 routerusers.post('/', newuser);
 routerusers.post('/:id/orders/', addorder);
 routerusers.put('/:id', edituser);
@@ -115,6 +116,20 @@ function addorder(req, res) {
     }
 }
 
+function getorderslist(req, res) {
+    log('user getorderslist')
+    if (req.params.id) {
+        Order.itemsbystatus(undefined,req.params.id)
+            .then(resolve => {
+                res.json(resolve)
+            })
+            .catch(err => _dberr(err, res));
+
+    } else {
+        res.statusCode = 400;
+        res.end(`Please, add a correct userid`);
+    }
+};
 
 /**системная функция для формирования единого ответа на ошибки в БД */
 function _dberr(err, res) {

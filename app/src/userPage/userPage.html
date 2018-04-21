@@ -1,15 +1,16 @@
 <md-progress-linear class="md-warn" md-mode="indeterminate" ng-disabled="user"></md-progress-linear>
 <div ng-if="user">
-    <md-content md-theme="docs-dark" layout="row" layout-align="space-between" layout-padding>
-        <h1>{{user.name}}</h1>
-        <md-divider vertical="true"></md-divider>
-        <p>
-            Баланс: {{user.balance || 0}}Ƀ
-            <md-button class="md-raised md-warn" ng-click="getmoney()">Пополнить</md-button>
-        </p>
+    <md-content md-theme="docs-dark"  layout-padding>
+        <div layout="row" layout-align="space-between">
+            <h1>{{user.name}}</h1>
+            <md-divider vertical="true"></md-divider>
+            <p>
+                Баланс: {{user.balance || 0}}Ƀ
+                <md-button class="md-raised md-warn" ng-click="getmoney()">Пополнить</md-button>
+            </p>
+        </div>
+        
+        <order-page></order-page>
+        <menu-page></menu-page>
     </md-content>
-    <md-divider></md-divider>
-    <order-page></order-page>
-    <md-divider></md-divider>
-    <menu-page></menu-page>
 </div>

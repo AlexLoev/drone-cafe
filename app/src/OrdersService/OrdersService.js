@@ -2,7 +2,7 @@ angular
     .module('CafeApp')
     .factory('OrdersService', function ($http, $routeParams) {
         var OrderItems = [];
-        var OrderSum = {sum: 0};
+        var OrderSum = { sum: 0 };
         var statuses = [
             'заказано',
             'готовится',
@@ -20,7 +20,7 @@ angular
                 if (item) {
                     let newitem = JSON.parse(JSON.stringify(item)); //создаем отдельный объект, чтобы изменения в объекте параметра не изменяли объект массива
                     let idx = OrderItems.findIndex(i => i.id === item.id);
-                    
+                    console.log('addItem idx', idx)
                     if (idx != -1) {
                         OrderItems[idx].quant++;
                         OrderSum.sum += OrderItems[idx].price;
@@ -30,7 +30,7 @@ angular
                         OrderItems.push(newitem);
                         OrderSum.sum += newitem.price;
                     }
-                    console.log('OrdersService addItem orderSum',OrderSum)
+                    console.log('OrdersService addItem orderSum', OrderSum)
                 }
             },
             removeItem(itemId) {
@@ -52,19 +52,44 @@ angular
             sendOrder(order) {
                 console.log('sendOrder', order);
                 return new Promise((resolve, reject) => {
-
                     if ($routeParams['userId'] && order) {
                         $http.post('users/' + $routeParams['userId'] + '/orders', order)
                             .then(res => {
                                 if (res.data) {
-                                    resolve(res.data)
+                                    this.getUserOrdersList()
+                                        .then(neworder => {
+                                            // OrderItems.splice(0,OrderItems.length,...neworder); // neworder.slice();
+                                            resolve(neworder)
+                                        })
+                                        .catch(err => { reject(err) });
                                 } else {
-                                    resolve('can not send order')
+                                    reject('can not send order')
                                 }
                             })
                             .catch(err => { reject(err) });
                     } else {
                         reject('no order')
+                    }
+                });
+            },
+            getUserOrdersList() {
+                var userId = $routeParams['userId'];
+                console.log('getUserOrdersList', userId);
+
+                return new Promise((resolve, reject) => {
+                    if (userId) {
+                        $http.get('users/' + userId + '/orders')
+                            .then(res => {
+                                if (res.data) {
+                                    OrderItems.splice(0,OrderItems.length,...res.data);
+                                    resolve(res.data)
+                                } else {
+                                    reject('can not get orders')
+                                }
+                            })
+                            .catch(err => { reject(err) });
+                    } else {
+                        reject('userId undifined')
                     }
                 });
             },

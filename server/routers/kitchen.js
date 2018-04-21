@@ -12,7 +12,6 @@ function getorderslist(req, res) {
     if (req.params.status) {
         Order.itemsbystatus(req.params.status)
             .then(resolve => {
-                log(resolve);
                 res.json(resolve)
             })
             .catch(err => _dberr(err, res));

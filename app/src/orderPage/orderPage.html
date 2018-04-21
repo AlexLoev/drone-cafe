@@ -1,22 +1,23 @@
-<div md-theme="docs-dark" ng-if="$ctrl.order.length">
+<div ng-if="$ctrl.order.length">
+    <md-divider></md-divider>
     <md-content layout="column" layout-padding>
         <h1 class="md-display-1">Заказ</h1>
-        <div layout-gt-xs="row" layout-align="start center" layout-wrap>
+        <div layout-gt-xs="row" layout-align="space-between" layout-wrap>
             <md-card flex="45" layout="column" ng-repeat="item in $ctrl.order">
                 <md-card-header>
                     <md-card-avatar class="example-header-image">
-
                         <img class="md-user-avatar" ng-src="{{item.image}}" alt="image caption">
                     </md-card-avatar>
                     <md-card-header-text>
                         <span class="md-title">{{item.title}}</span>
                     </md-card-header-text>
                 </md-card-header>
-                <!-- <md-card-title>
-                    <span class="md-subhead">{{item.title}}</span>
-                </md-card-title> -->
 
                 <md-card-content layout-align="center center">
+                    <div layout="row" layout-margin>
+                        <span class="md-subhead">Статус:  </span>
+                        <span class="md-subhead" style="color: #4CAF50">{{item.status || 'Ожидает отправки'}}</span>
+                    </div>
                     <h2>Цена: {{item.price*item.quant}}Ƀ </h2>
                     <p>Кол-во: {{item.quant}} </p>
                 </md-card-content>

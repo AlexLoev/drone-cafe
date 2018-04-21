@@ -20,7 +20,7 @@ OrderSchema.statics.insertnew = function (userid, item) {
     log('insert new order', userid, item);
     return new Promise((resolve, reject) => {
         try {
-            if (userid && item) {
+            if (userid && item && !item._id) {
                 var order = this(item);
                 order.userid = userid;
                 order.status = 'заказано';
@@ -32,7 +32,7 @@ OrderSchema.statics.insertnew = function (userid, item) {
                     })
                     .catch(err => { reject(err) });
             } else {
-                reject('undifined userid or item?');
+                reject('undifined userid or existing item?');
 
             }
 
@@ -74,9 +74,18 @@ OrderSchema.statics.deletebyid = function (orderid) {
     });
 };
 
-OrderSchema.statics.itemsbystatus = function (status) {
+OrderSchema.statics.itemsbystatus = function (status, userid) {
     return new Promise((resolve, reject) => {
-        Order.find({ status: { $in: [status] }, deleted: { $exists: false } })
+        var filter;
+        if (status) {
+            filter = userid ?
+                { userid: { $in: [userid] }, status: { $in: [status] }, deleted: { $exists: false } } :
+                { status: { $in: [status] }, deleted: { $exists: false } }
+        } else {
+            filter = { userid: { $in: [userid] }, deleted: { $exists: false } }
+        }
+
+        Order.find(filter)
             .then(res => resolve(res.length ? res : -1))
             .catch(err => { reject(err) });
     });

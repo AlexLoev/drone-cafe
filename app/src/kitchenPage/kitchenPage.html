@@ -12,7 +12,7 @@
     </md-content>
     <md-divider></md-divider>
     <md-content>
-        <md-progress-linear class="md-warn" md-mode="indeterminate" ng-disabled="$ctrl.order"></md-progress-linear>
+        <md-progress-linear class="md-warn" md-mode="indeterminate" ng-disabled="$ctrl.loaded"></md-progress-linear>
         <md-list flex>
             <md-list-item ng-if="!item.hide" layout="row" layout-align="center center" class="md-3-line" ng-repeat="item in $ctrl.order">
                 <img ng-src="{{item.image}}?{{$index}}" class="md-avatar" alt="{{item.id}}" />

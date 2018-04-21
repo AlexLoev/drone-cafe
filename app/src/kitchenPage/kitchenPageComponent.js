@@ -1,5 +1,5 @@
 CafeApp.component('kitchenPage', {
-    controller: function kitchenCtrl($scope, $http, $routeParams, OrdersService, UsersService) {
+    controller: function kitchenCtrl($scope, $interval, $routeParams, OrdersService, UsersService) {
         var userId = $routeParams['userId'];
 
         // если нажали F5 то надо подгрузить юзера из БД
@@ -13,10 +13,17 @@ CafeApp.component('kitchenPage', {
 
         $scope.changeListStatus = function (statusIdx) {
             $scope.status = statusIdx;
+            ctrl.loaded = false;
             OrdersService.getOrdersList(statusIdx)
                 .then(order => {
+                    ctrl.loaded = true;
                     console.log('scope.changeListStatus', order);
                     ctrl.order = order;
+                    $scope.$apply();
+                })
+                .catch(reject => {
+                    ctrl.loaded = true
+                    console.error(reject);
                 })
         }
 
@@ -28,12 +35,19 @@ CafeApp.component('kitchenPage', {
                     console.log('changeorderstatus on resolve', resolve);
                     $scope.changeListStatus($scope.status)
                 })
+                .catch(reject => {
+                    ctrl.loaded = true
+                    console.error(reject);
+                })
 
         };
-
         $scope.status = 0;
         $scope.changeListStatus($scope.status);
-
+        
+        checkOrders = $interval(function() {
+            console.log('interval orders');
+            $scope.changeListStatus($scope.status);
+        }, 10000);
     },
     templateUrl: 'src/kitchenPage/kitchenPage.html'
 })
