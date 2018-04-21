@@ -7,7 +7,7 @@ angular
             $mdToast.show(
                 $mdToast.simple()
                     .textContent(text || 'no text')
-                    .position('bottom right')
+                    .position('end')
                     .hideDelay(delay || 5000)
             );
         };
