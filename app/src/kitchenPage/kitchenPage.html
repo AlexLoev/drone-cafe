@@ -1,0 +1,20 @@
+<div ng-if="user.loaded">
+    <md-content md-theme="docs-dark" layout-padding>
+        <h1>{{user.name}}</h1>
+        <label>Статус</label>
+        <md-select aria-label="status" ng-model="status" ng-change="changeListStatus(status)">
+            <md-option ng-value="{{$index}}" ng-repeat="opt in statuses">{{opt}}</md-option>
+        </md-select>
+    </md-content>
+
+    <md-content>
+        <md-progress-linear md-mode="indeterminate" ng-disabled="$ctrl.order"></md-progress-linear>
+        <md-list flex>
+            <md-list-item ng-if="!item.hide" layout="row" layout-align="center center" class="md-3-line" ng-repeat="item in $ctrl.order">
+                <img ng-src="{{item.image}}?{{$index}}" class="md-avatar" alt="{{item.id}}" />
+                <p>  {{ item.title }} </p>
+                <md-button class="md-accent" ng-click="$ctrl.changeorderstatus(item._id, item.status)" >Начать</md-button>
+            </md-list-item>
+        </md-list>
+    </md-content>
+</div>

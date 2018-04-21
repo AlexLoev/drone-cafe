@@ -6,6 +6,7 @@ const ObjectID = mongoose.Types.ObjectID;
 const OrderSchema = new Schema({
     userid: String,
     itemid: String,
+    image: String,
     title: String,
     ingredients: Array,
     price: Number,
@@ -22,7 +23,7 @@ OrderSchema.statics.insertnew = function (userid, item) {
             if (userid && item) {
                 var order = this(item);
                 order.userid = userid;
-                order.status = 'Заказано';
+                order.status = 'заказано';
                 order.dateadd = new Date();
                 order.save()
                     .then(saved => {

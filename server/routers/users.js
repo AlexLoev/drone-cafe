@@ -5,12 +5,12 @@ const log = console.log;
 
 const routerusers = express.Router();
 routerusers.get('/', getuserslist);
-routerusers.get('/:email', findbyemail);
+routerusers.get('/:id', findbyid);
 routerusers.post('/', newuser);
 routerusers.post('/:id/orders/', addorder);
 routerusers.put('/:id', edituser);
 routerusers.put('/balance/:email', addbalance);
-routerusers.delete('/:email', removebyemail);
+routerusers.get('/:email/del', removebyemail);
 
 /** создает нового пользователя по запросу */
 function newuser(req, res) {
@@ -51,15 +51,15 @@ function getuserslist(req, res) {
         .catch(err => _dberr(err, res));
 };
 
-function findbyemail(req, res) {
-    log('findbyemail', req.params.email);
-    if (req.params.email) {
-        User.findOne({ email: req.params.email })
+function findbyid(req, res) {
+    log('findbyid', req.params.id);
+    if (req.params.id) {
+        User.findById(req.params.id)
             .then(resolve => { res.json(resolve) })
             .catch(err => _dberr(err, res));
     } else {
         res.statusCode = 400;
-        res.end(`Please, add a correct user JSON in body {name,email}`);
+        res.end(`Please, add a correct userId`);
     }
 };
 

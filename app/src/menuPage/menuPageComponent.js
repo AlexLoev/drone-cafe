@@ -14,7 +14,7 @@ CafeApp.component('menuPage', {
             // console.log(ctrl.menu);
             // console.log(newitem[0]);
             newitem ? OrdersService.addItem(newitem[0]) : console.log('not found');
-            console.log(OrdersService.getItems());
+            // console.log(OrdersService.getItems());
         } 
     },
     templateUrl: 'src/menuPage/menuPage.html'

@@ -2,8 +2,16 @@ angular
     .module('CafeApp')
     .factory('OrdersService', function ($http, $routeParams) {
         var OrderItems = [];
+        let statuses = [
+            'заказано',
+            'готовится',
+            'доставляется',
+            'возникли сложности',
+            'подано'
+        ];
         // console.log($routeParams['userId'])
         return {
+            statuses,
             getItems() {
                 return OrderItems;
             },
@@ -34,7 +42,7 @@ angular
                     console.log('Order: nothing to delete');
                 }
 
-                
+
 
             },
             sendOrder(order) {
@@ -52,7 +60,52 @@ angular
                             })
                             .catch(err => { reject(err) });
                     } else {
-                        resolve('no order')
+                        reject('no order')
+                    }
+                });
+            },
+            getOrdersList(statusIdx) {
+                console.log('getOrdersList', statusIdx);
+                return new Promise((resolve, reject) => {
+                    var status = statuses[statusIdx];
+                    if (status) {
+                        $http.get('kitchen/orders/' + status)
+                            .then(res => {
+                                if (res.data) {
+                                    resolve(res.data)
+                                } else {
+                                    resolve('can not get orders')
+                                }
+                            })
+                            .catch(err => { reject(err) });
+                    } else {
+                        reject('status undifined')
+                    }
+                });
+            },
+            changeorderstatus(orderId, status) {
+                console.log('changeorderstatus', orderId, status);
+
+                return new Promise((resolve, reject) => {
+                    if (orderId && status) {
+                        //получаем индекс следующего статуса по порядку
+                        nextStatus = statuses.findIndex(item => item == status) + 1;
+                        console.log('nextStatus', nextStatus);
+                        if (nextStatus == 0 || nextStatus == statuses.length) {
+                            reject('can not go to next status, cause it is last or undifined')
+                        } else {
+                            $http.put('kitchen/orders/' + orderId, { status: statuses[nextStatus] })
+                                .then(res => {
+                                    if (res.data) {
+                                        resolve(res.data);
+                                    } else {
+                                        reject('can not changeorderstatus');
+                                    }
+                                })
+                                .catch(err => { reject(err) });
+                        }
+                    } else {
+                        reject('changeorderstatus params undifined');
                     }
                 });
             }

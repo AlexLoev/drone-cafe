@@ -16,7 +16,12 @@ CafeApp.component('authPage', {
                 console.log('authPage signin', user)
                 $scope.user = user;
                 UsersService.curUsr = user;
-                $location.path('/users/'+user._id);
+                console.log('authPage profile',user.profile)
+                if (user.profile == 'Клиент') {
+                    $location.path('/users/'+user._id);
+                } else {
+                    $location.path('/kitchen/'+user._id);
+                }
             });
         } 
     },
