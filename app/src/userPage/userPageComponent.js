@@ -1,5 +1,11 @@
 CafeApp.component('userPage', {
-    controller: function userCtrl($scope, $http, UsersService) {
+    controller: function userCtrl($scope, $http, $routeParams, UsersService) {
+        let userId = $routeParams['userId'];
+        if (!UsersService.curUsr && userId) {
+            console.log('userCtrl try load user', userId);
+            UsersService.loaduser(userId)
+                .then(user => $scope.user = user)
+        }
         // $scope.user.loaded = true;
         console.log('upCtrl loaded',$scope.user)
         const ctrl = this;

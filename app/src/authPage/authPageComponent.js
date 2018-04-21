@@ -3,8 +3,8 @@ CafeApp.component('authPage', {
         // console.log('authPage', $location);
         const ctrl = this;
         $scope.user = {
-            name: "Alex",
-            email: "alexloev@gmail.com",
+            name: "Valya",
+            email: "valya@gmail.com",
             profile: "Клиент",
             loaded: false
         };
