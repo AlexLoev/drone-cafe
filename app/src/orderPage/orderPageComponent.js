@@ -1,7 +1,7 @@
 CafeApp.component('orderPage', {
     controller: function orderPage($http, OrdersService) {
         const ctrl = this;
-        ctrl.order = OrdersService.getItems();
+        ctrl.order = OrdersService.OrderItems;
         ctrl.sendOrder = () => {
             if (ctrl.order && ctrl.order.length) {
                 OrdersService.sendOrder(ctrl.order);
@@ -11,6 +11,8 @@ CafeApp.component('orderPage', {
 
         };
         ctrl.removeItem = OrdersService.removeItem;
+        ctrl.orderSum = OrdersService.OrderSum;
+
     },
     templateUrl: 'src/orderPage/orderPage.html'
 })

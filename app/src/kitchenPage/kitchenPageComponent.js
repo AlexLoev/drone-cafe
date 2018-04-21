@@ -1,15 +1,14 @@
 CafeApp.component('kitchenPage', {
     controller: function kitchenCtrl($scope, $http, $routeParams, OrdersService, UsersService) {
+        var userId = $routeParams['userId'];
+
         // если нажали F5 то надо подгрузить юзера из БД
-        let userId = $routeParams['userId'];
-        if (!UsersService.curUsr && userId) {
+        if (!UsersService.user.length && userId) {
             console.log('kitchenCtrl try load user', userId);
             UsersService.loaduser(userId)
-                .then(user => $scope.user = user)
+                .then(user => $scope.user = UsersService.user[0])
         }
-        console.log('kitchenPage loaded', $scope.user)
         const ctrl = this;
-        $scope.user = UsersService.curUsr;
         $scope.statuses = OrdersService.statuses;
 
         $scope.changeListStatus = function (statusIdx) {
@@ -17,7 +16,6 @@ CafeApp.component('kitchenPage', {
             OrdersService.getOrdersList(statusIdx)
                 .then(order => {
                     console.log('scope.changeListStatus', order);
-                    // ctrl.order = [];
                     ctrl.order = order;
                 })
         }
@@ -34,7 +32,7 @@ CafeApp.component('kitchenPage', {
         };
 
         $scope.status = 0;
-        $scope.changeListStatus($scope.status);        
+        $scope.changeListStatus($scope.status);
 
     },
     templateUrl: 'src/kitchenPage/kitchenPage.html'

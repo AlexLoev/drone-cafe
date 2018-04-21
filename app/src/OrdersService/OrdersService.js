@@ -2,7 +2,8 @@ angular
     .module('CafeApp')
     .factory('OrdersService', function ($http, $routeParams) {
         var OrderItems = [];
-        let statuses = [
+        var OrderSum = {sum: 0};
+        var statuses = [
             'заказано',
             'готовится',
             'доставляется',
@@ -12,22 +13,24 @@ angular
         // console.log($routeParams['userId'])
         return {
             statuses,
-            getItems() {
-                return OrderItems;
-            },
+            OrderSum,
+            OrderItems,
             addItem(item) {
                 console.log('OrdersService additem', item)
                 if (item) {
                     let newitem = JSON.parse(JSON.stringify(item)); //создаем отдельный объект, чтобы изменения в объекте параметра не изменяли объект массива
                     let idx = OrderItems.findIndex(i => i.id === item.id);
-                    console.log(idx)
+                    
                     if (idx != -1) {
                         OrderItems[idx].quant++;
+                        OrderSum.sum += OrderItems[idx].price;
                     } else {
                         console.log(newitem);
                         newitem.quant = 1;
                         OrderItems.push(newitem);
+                        OrderSum.sum += newitem.price;
                     }
+                    console.log('OrdersService addItem orderSum',OrderSum)
                 }
             },
             removeItem(itemId) {
@@ -38,6 +41,7 @@ angular
                     } else {
                         OrderItems[idx].quant--
                     }
+                    OrderSum.sum -= OrderItems[idx].price;
                 } else {
                     console.log('Order: nothing to delete');
                 }

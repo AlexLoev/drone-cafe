@@ -1,5 +1,5 @@
 CafeApp.component('menuPage', {
-    controller: function menuCtrl($http, OrdersService) {
+    controller: function menuCtrl($http, OrdersService, UsersService) {
         const ctrl = this;
         // console.log('menuCtrl', this);
         $http.get('assets/menu.json')
@@ -8,13 +8,20 @@ CafeApp.component('menuPage', {
             });
         
         ctrl.add = (itemid) => {
-            console.log('ctrl.add', itemid);
-            // ctrl.menu.map((item, indx) => {console.log('map',item, indx)});
-            let newitem = ctrl.menu.filter(item => item.id == itemid);
-            // console.log(ctrl.menu);
-            // console.log(newitem[0]);
-            newitem ? OrdersService.addItem(newitem[0]) : console.log('not found');
-            // console.log(OrdersService.getItems());
+            var newitem = ctrl.menu.find(i => i.id == itemid);
+            var curSum = OrdersService.OrderSum;
+            var user = UsersService.user;
+            console.log('menuCtrl add', newitem, user , curSum)
+            if (newitem && user && curSum) {
+                var credit = curSum.sum + newitem.price - user[0].balance;
+                if (credit < 0 ) {
+                    OrdersService.addItem(newitem);
+                } else {
+                    UsersService.toast(`Необходимо пополнить баланс на ${credit}Ƀ`);
+                }
+            } else {
+                UsersService.toast('Ошибка в параметрах запроса, попробуйте перезагрузить страницу');
+            }
         } 
     },
     templateUrl: 'src/menuPage/menuPage.html'

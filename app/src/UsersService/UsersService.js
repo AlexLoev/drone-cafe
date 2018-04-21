@@ -1,9 +1,8 @@
 angular
     .module('CafeApp')
     .factory('UsersService', function ($http, $mdToast) {
-        let curUsr;
-        let profiles = ['Клиент', 'Повар']
-
+        var user = [];
+        var profiles = ['Клиент', 'Повар']
         function toast(text, delay) {
             $mdToast.show(
                 $mdToast.simple()
@@ -12,9 +11,8 @@ angular
                     .hideDelay(delay || 5000)
             );
         };
-        // console.log('usersService');
         return {
-            curUsr,
+            user,
             profiles,
             toast,
             signin(user) {
@@ -49,20 +47,35 @@ angular
                         $http.get('users/' + userId)
                             .then(res => {
                                 if (res.data) {
-                                    console.log(res.data);
-                                    user = res.data;
-                                    user.loaded = true
+                                    // console.log(res.data);
+                                    // newuser = res.data;
                                     console.log('UsersService loaduser resolve', user);
-                                    toast('С возвращением ' + user.name, 2000);
-                                    curUsr = user;
+                                    user.push(res.data);
+                                    toast('С возвращением ' + user[0].name, 2000);
                                     resolve(user)
                                 } else {
-                                    resolve('Can not find user by ID '+userId)
+                                    reject('Can not find user by ID '+userId)
                                 }
                             })
                             .catch(err => { reject(err) });
                     } else {
                         reject('userID undifined')
+                    }
+                });
+            },
+            getmoney() {
+                return new Promise((resolve, reject) => {
+                    if (user[0].email) {
+                        $http.put('/users/balance/'+user[0].email)
+                            .then(res => { 
+                                user[0].balance = res.data.balance;
+                                toast('Ваш баланс успешно пополнен', 3000);
+                                resolve(user[0]);
+                            })
+                            .catch(err => reject(err));
+                    } else {
+                        toast('Required fields are empty', 2000);
+                        reject('Required fields are empty');
                     }
                 });
             }
