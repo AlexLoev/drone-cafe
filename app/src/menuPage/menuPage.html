@@ -1,29 +1,30 @@
 <md-progress-linear class="md-warn" md-mode="indeterminate" ng-disabled="$ctrl.menu"></md-progress-linear>
-<md-content>
+<md-content md-theme="docs-dark">
+    <div layout-gt-xs="row" layout-wrap>
+        <md-card flex=45 layout="column" ng-repeat="item in $ctrl.menu">
+            <md-card-header>
+                <md-card-avatar>
+                    <img class="md-user-avatar" src="{{item.image}}" alt="{{item.title}}" />
+                </md-card-avatar>
+                <md-card-header-text>
+                    <span class="md-title">{{item.title}} {{item.rating}}</span>
+                    <span class="md-subhead">{{item.price}}</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-title>
+                <md-card-title-media>
+                    <div class="md-media-md card-media">
 
-    <md-card layout="column" ng-repeat="item in $ctrl.menu">
-        <md-card-header>
-            <md-card-avatar>
-                <img class="md-user-avatar" src="{{item.image}}" alt="{{item.title}}" />
-            </md-card-avatar>
-            <md-card-header-text>
-                <span class="md-title">{{item.title}} {{item.rating}}</span>
-                <span class="md-subhead">{{item.price}}</span>
-            </md-card-header-text>
-        </md-card-header>
-        <md-card-title>
-            <md-card-title-media>
-                <div class="md-media-md card-media">
+                        <img ng-src="{{item.image}}" "md-card-image-sm" alt="{{item.title}}">
+                    </div>
+                </md-card-title-media>
 
-                    <img ng-src="{{item.image}}" "md-card-image-sm" alt="{{item.title}}">
-                </div>
-            </md-card-title-media>
+            </md-card-title>
+            <md-card-actions>
 
-        </md-card-title>
-        <md-card-actions>
+                <md-button class="md-raised md-primary" data-ng-click="$ctrl.add(item.id)">Добавить</md-button>
 
-            <md-button class="md-raised md-primary" data-ng-click="$ctrl.add(item.id)">Добавить</md-button>
-
-        </md-card-actions>
-    </md-card>
+            </md-card-actions>
+        </md-card>
+    </div>
 </md-content>
