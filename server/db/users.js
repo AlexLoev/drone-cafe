@@ -41,9 +41,9 @@ UserSchema.statics.insertnew = function (newuser) {
     });
 };
 
-UserSchema.statics.removebyemail = function(email) {
+UserSchema.statics.removebyemail = function (email) {
     return new Promise((resolve, reject) => {
-        this.findOne({email: email}, (err, user) => {
+        this.findOne({ email: email }, (err, user) => {
             if (err) {
                 // log('findByemail',err);
                 reject(err)
@@ -56,15 +56,28 @@ UserSchema.statics.removebyemail = function(email) {
                         } else {
                             // log('deleted', delres);
                             resolve(delres);
-                        }   
+                        }
                     });
                 } else {
                     resolve('Not matched user to remove');
                 };
             };
         });
-    });    
+    });
 };
+
+UserSchema.statics.changeUserBalance = function (userId, moneyCount) {
+    return new Promise((resolve, reject) => {
+        var options = { new: true };
+        var updObj = { $inc: { balance: moneyCount } };
+        User.findByIdAndUpdate(userId, updObj, options)
+            .then(user => {
+                log('changeUserBalance user found', user);
+                resolve(user);
+             })
+            .catch(err => { reject(err) });
+    });
+}
 
 var User = mongoose.model('users', UserSchema);
 

@@ -10,7 +10,7 @@ routerusers.get('/:id/orders/', getorderslist);
 routerusers.post('/', newuser);
 routerusers.post('/:id/orders/', addorder);
 routerusers.put('/:id', edituser);
-routerusers.put('/balance/:email', addbalance);
+routerusers.put('/:id/balance', updateBalance);
 routerusers.get('/:email/del', removebyemail);
 
 /** создает нового пользователя по запросу */
@@ -80,13 +80,12 @@ function edituser(req, res) {
     log('edituser', req);
 }
 
-function addbalance(req, res) {
-    log('addbalance', req.params)
-    if (req.params.email) {
-        User.findOneAndUpdate(
-            { email: req.params.email },
-            { $inc: { balance: 100 } },
-            { new: true })
+function updateBalance(req, res) {
+    var userId = req.params.id;
+    var moneyCount = req.body.moneyCount;
+    log('updateBalance', userId, moneyCount);
+    if (userId && moneyCount) {
+        User.changeUserBalance(userId, moneyCount)
             .then(resolve => {
                 log('balance updated', resolve);
                 res.json(resolve)
@@ -94,32 +93,52 @@ function addbalance(req, res) {
             .catch(err => _dberr(err, res));
     } else {
         res.statusCode = 400;
-        res.end(`Please, add a correct user JSON in body {email, balance}`);
+        res.end(`Please, add a correct userId param or moneyCount in JSON`);
     }
-}
+};
 
 function addorder(req, res) {
-    log('addorder', req.params)
-    if (req.params.id && req.body && req.body.length) {
-        log(req.body);
-        req.body.forEach(item => {
-            Order.insertnew(req.params.id, item)
-                .then(resolve => {
-                    log('addorder success', resolve);
+    log('addorder req.body', req.body);
+    var userId = req.params.id;
+    var moneyCount = 0;
+    if (userId && req.body && req.body.length) {
+        req.body.map(item => {
+            //если в теле сообщения новый заказ, то считаем деньги, в противном случае не считаем
+            if (!item._id) { moneyCount += item.price * item.quant }
+        })
+
+        log('addorder after apply map', moneyCount);
+        if (moneyCount > 0) {
+            User.findById(userId)
+                .then(user => {
+                    if (user.balance >= moneyCount) {
+                        req.body.forEach(item => {
+                            Order.insertnew(userId, item)
+                                .then(resolve => {
+                                    log('addorder success', resolve);
+                                })
+                                .catch(err => _dberr(err, res));
+                        })
+                        res.json('addorder success')
+                    } else {
+                        res.statusCode = 400;
+                        res.end(`Not enough money: ${moneyCount - user.balance}`);
+                    }
                 })
                 .catch(err => _dberr(err, res));
-        })
-        res.json('addorder success')
+        } else {
+            res.json('addorder success')
+        }
     } else {
         res.statusCode = 400;
-        res.end(`Please, add a correct user ID`);
+        res.end(`Please, add a correct userId`);
     }
 }
 
 function getorderslist(req, res) {
     log('user getorderslist')
     if (req.params.id) {
-        Order.itemsbystatus(undefined,req.params.id)
+        Order.itemsbystatus(undefined, req.params.id)
             .then(resolve => {
                 res.json(resolve)
             })
@@ -139,8 +158,6 @@ function _dberr(err, res) {
     res.end('MongoDB Error in users collection');
 };
 
-// User.insertnew({ name: "Kidd", email: "kidd@mail.com" })
-//     .then(resolve => { log(resolve) })
-//     .catch(err => log(err));
+
 
 module.exports = routerusers;

@@ -65,8 +65,8 @@ angular
             },
             getmoney() {
                 return new Promise((resolve, reject) => {
-                    if (user[0].email) {
-                        $http.put('/users/balance/'+user[0].email)
+                    if (user[0]._id) {
+                        $http.put('/users/'+user[0]._id+'/balance', {moneyCount: 100})
                             .then(res => { 
                                 user[0].balance = res.data.balance;
                                 toast('Ваш баланс успешно пополнен', 3000);
