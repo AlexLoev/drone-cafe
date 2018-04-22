@@ -2,12 +2,12 @@ CafeApp.component('authPage', {
     controller: function authCtrl($scope, $location, UsersService) {
         // console.log('authPage', $location);
         const ctrl = this;
-        // $scope.user = {
+        $scope.user = {
         //     name: "Valya",
         //     email: "valya@gmail.com",
-        //     profile: "Клиент",
-        //     loaded: false
-        // };
+            profile: "Клиент",
+            loaded: false
+        };
         ctrl.profiles = UsersService.profiles;
         // console.log('authCtrl', this);
         ctrl.signin = () => {
