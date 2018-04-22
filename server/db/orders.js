@@ -17,7 +17,7 @@ const OrderSchema = new Schema({
 });
 
 OrderSchema.statics.insertnew = function (userid, item) {
-    log('insert new order', userid, item);
+    // log('insert new order', userid, item);
     return new Promise((resolve, reject) => {
         try {
             if (userid && item && !item._id) {
@@ -27,17 +27,17 @@ OrderSchema.statics.insertnew = function (userid, item) {
                 order.dateadd = new Date();
                 order.save()
                     .then(saved => {
-                        log('new item saved', saved);
+                        // log('new item saved', saved);
                         resolve(saved);
                     })
                     .catch(err => { reject(err) });
             } else {
-                reject('undifined userid or existing item?');
+                resolve('undifined userid or existing item?');
 
             }
 
         } catch (err) {
-            log('catched in try insert new order')
+            // log('catched in try insert new order')
             reject(err)
         };
     });

@@ -6,7 +6,7 @@ CafeApp.component('orderPage', {
             if (ctrl.order && ctrl.order.length) {
                 OrdersService.sendOrder(ctrl.order)
                 .then(resolve => {
-                    // $scope.$apply(); //страница иногда отказывается рендериться без вызова этого метода http://jimhoskins.com/2012/12/17/angularjs-and-apply.html
+                    $scope.$apply(); //страница иногда отказывается рендериться без вызова этого метода http://jimhoskins.com/2012/12/17/angularjs-and-apply.html
                 })
             } else {
                 console.log('no items to send');
@@ -20,6 +20,8 @@ CafeApp.component('orderPage', {
             console.log('interval');
             OrdersService.getUserOrdersList();
         }, 20000);
+
+        OrdersService.getUserOrdersList();
 
     },
     templateUrl: 'src/orderPage/orderPage.html'

@@ -24,11 +24,11 @@ angular
                             .then(res => {
                                 if (res.data) {
                                     user = res.data;
-                                    user.loaded = true
-                                    console.log('UsersService signin resolve user loaded', user);
+                                    // user.loaded = true
+                                    // console.log('UsersService signin resolve user loaded', user);
 
                                     toast('Привет, пользователь ' + user.name, 2000);
-                                    curUsr = user;
+                                    // curUsr = user;
                                     resolve(user);
                                 } else {
                                     toast('Nothing found by this email ' + user.email, 2000);
@@ -47,10 +47,9 @@ angular
                         $http.get('users/' + userId)
                             .then(res => {
                                 if (res.data) {
-                                    // console.log(res.data);
-                                    // newuser = res.data;
-                                    console.log('UsersService loaduser resolve', user);
-                                    user.push(res.data);
+                                    user.length ? 
+                                        user[0].balance = res.data.balance
+                                        : user.push(res.data);
                                     toast('С возвращением ' + user[0].name, 2000);
                                     resolve(user)
                                 } else {

@@ -27,12 +27,12 @@ CafeApp.component('kitchenPage', {
                 })
         }
 
-        ctrl.changeorderstatus = function (orderId, status) {
-            OrdersService.changeorderstatus(orderId, status)
+        ctrl.changeOrderStatus = function (orderId, status) {
+            OrdersService.changeOrderStatus(orderId, status)
                 .then(resolve => {
                     var orderIdx = ctrl.order.findIndex(item => item._id == orderId);
                     ctrl.order[orderIdx].hide = true;
-                    console.log('changeorderstatus on resolve', resolve);
+                    console.log('changeOrderStatus on resolve', resolve);
                     $scope.changeListStatus($scope.status)
                 })
                 .catch(reject => {

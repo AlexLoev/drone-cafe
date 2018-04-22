@@ -1,6 +1,6 @@
 angular
     .module('CafeApp')
-    .factory('OrdersService', function ($http, $routeParams) {
+    .factory('OrdersService', function ($http, $routeParams, UsersService) {
         var OrderItems = [];
         var OrderSum = { sum: 0 };
         var statuses = [
@@ -10,7 +10,6 @@ angular
             'возникли сложности',
             'подано'
         ];
-        // console.log($routeParams['userId'])
         return {
             statuses,
             OrderSum,
@@ -20,14 +19,13 @@ angular
                 if (item) {
                     let newitem = JSON.parse(JSON.stringify(item)); //создаем отдельный объект, чтобы изменения в объекте параметра не изменяли объект массива
                     let idx = OrderItems.findIndex(i => i.id === item.id);
-                    console.log('addItem idx', idx)
                     if (idx != -1) {
                         OrderItems[idx].quant++;
                         OrderSum.sum += OrderItems[idx].price;
                     } else {
                         console.log(newitem);
                         newitem.quant = 1;
-                        OrderItems.push(newitem);
+                        OrderItems.unshift(newitem);
                         OrderSum.sum += newitem.price;
                     }
                     console.log('OrdersService addItem orderSum', OrderSum)
@@ -35,13 +33,13 @@ angular
             },
             removeItem(itemId) {
                 let idx = OrderItems.findIndex(i => i.id == itemId);
-                if (idx != -1) {
+                if (idx != -1 && !OrderItems[idx]._id) {
+                    OrderSum.sum -= OrderItems[idx].price;
                     if (OrderItems[idx].quant == 1) {
                         OrderItems.splice(idx, 1);
                     } else {
                         OrderItems[idx].quant--
                     }
-                    OrderSum.sum -= OrderItems[idx].price;
                 } else {
                     console.log('Order: nothing to delete');
                 }
@@ -52,15 +50,16 @@ angular
             sendOrder(order) {
                 console.log('sendOrder', order);
                 return new Promise((resolve, reject) => {
-                    if ($routeParams['userId'] && order) {
-                        $http.post('users/' + $routeParams['userId'] + '/orders', order)
+                    const userId = $routeParams['userId'];
+                    if (userId && order) {
+                        $http.post('users/' + userId + '/orders', order)
                             .then(res => {
                                 if (res.data) {
-                                    this.getUserOrdersList()
-                                        .then(neworder => {
-                                            // OrderItems.splice(0,OrderItems.length,...neworder); // neworder.slice();
-                                            resolve(neworder)
-                                        })
+                                    OrderItems.splice(0, OrderItems.length);
+                                    const p1 = this.getUserOrdersList();
+                                    const p2 = UsersService.loaduser(userId);
+                                    Promise.all([p1, p2])
+                                        .then(() => { resolve(res) })
                                         .catch(err => { reject(err) });
                                 } else {
                                     reject('can not send order')
@@ -81,7 +80,13 @@ angular
                         $http.get('users/' + userId + '/orders')
                             .then(res => {
                                 if (res.data) {
-                                    OrderItems.splice(0,OrderItems.length,...res.data);
+                                    const NewItems = OrderItems.filter(item => { return !item._id });
+                                    OrderItems.splice(0, OrderItems.length, ...res.data);
+                                    OrderItems.unshift(...NewItems);
+                                    OrderSum.sum = 0;
+                                    OrderItems.map(item => {
+                                        if (!item._id) { OrderSum.sum += item.price * item.quant }
+                                    });
                                     resolve(res.data)
                                 } else {
                                     reject('can not get orders')
@@ -89,7 +94,7 @@ angular
                             })
                             .catch(err => { reject(err) });
                     } else {
-                        reject('userId undifined')
+                        resolve('userId undifined')
                     }
                 });
             },
@@ -112,8 +117,8 @@ angular
                     }
                 });
             },
-            changeorderstatus(orderId, status) {
-                console.log('changeorderstatus', orderId, status);
+            changeOrderStatus(orderId, status) {
+                console.log('changeOrderStatus', orderId, status);
 
                 return new Promise((resolve, reject) => {
                     if (orderId && status) {
@@ -128,13 +133,13 @@ angular
                                     if (res.data) {
                                         resolve(res.data);
                                     } else {
-                                        reject('can not changeorderstatus');
+                                        reject('can not changeOrderStatus');
                                     }
                                 })
                                 .catch(err => { reject(err) });
                         }
                     } else {
-                        reject('changeorderstatus params undifined');
+                        reject('changeOrderStatus params undifined');
                     }
                 });
             }

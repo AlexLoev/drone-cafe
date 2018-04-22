@@ -17,7 +17,7 @@
             <md-list-item ng-if="!item.hide" layout="row" layout-align="center center" class="md-3-line" ng-repeat="item in $ctrl.order">
                 <img ng-src="{{item.image}}?{{$index}}" class="md-avatar" alt="{{item.id}}" />
                 <p> {{ item.title }} </p>
-                <md-button class="md-accent" ng-click="$ctrl.changeorderstatus(item._id, item.status)">Начать</md-button>
+                <md-button class="md-accent" ng-click="$ctrl.changeOrderStatus(item._id, item.status)">Начать</md-button>
             </md-list-item>
         </md-list>
     </md-content>
