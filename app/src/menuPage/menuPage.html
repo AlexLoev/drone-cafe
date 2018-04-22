@@ -1,7 +1,7 @@
 <md-progress-linear class="md-warn" md-mode="indeterminate" ng-disabled="$ctrl.menu"></md-progress-linear>
 <md-divider></md-divider>
 <div layout-gt-xs="row" layout-align="space-between" layout-wrap>
-    <md-card flex=45 layout="column" ng-repeat="item in $ctrl.menu">
+    <md-card flex="45" layout="column" ng-repeat="item in $ctrl.menu" style="min-width: 170px; max-width: 170px;">
         <md-card-header>
             <md-card-avatar>
                 <img class="md-user-avatar" ng-src="{{item.image}}" alt="{{item.title}}" />
@@ -20,7 +20,7 @@
             </md-card-title-media>
 
         </md-card-title>
-        <md-card-actions>
+        <md-card-actions layout="column">
 
             <md-button class="md-raised md-primary" ng-click="$ctrl.add(item.id)">Добавить</md-button>
 
