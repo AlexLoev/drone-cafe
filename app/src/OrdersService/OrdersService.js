@@ -80,19 +80,19 @@ angular
                         $http.get('users/' + userId + '/orders')
                             .then(res => {
                                 console.log('getUserOrdersList', res);
+                                const NewItems = OrderItems.filter(item => { return !item._id });
                                 if (res.data != -1) {
-                                    const NewItems = OrderItems.filter(item => { return !item._id });
                                     OrderItems.splice(0, OrderItems.length, ...res.data);
-                                    OrderItems.unshift(...NewItems);
-                                    OrderSum.sum = 0;
-                                    OrderItems.map(item => {
-                                        if (!item._id) { OrderSum.sum += item.price * item.quant }
-                                    });
-                                    resolve(res.data)
                                 } else {
                                     OrderItems.splice(0, OrderItems.length);
                                     UsersService.loaduser(userId)
                                 }
+                                OrderItems.unshift(...NewItems);
+                                OrderSum.sum = 0;
+                                OrderItems.map(item => {
+                                    if (!item._id) { OrderSum.sum += item.price * item.quant }
+                                });
+                                resolve(res.data)
                             })
                             .catch(err => { reject(err) });
                     } else {
