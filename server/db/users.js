@@ -81,4 +81,6 @@ UserSchema.statics.changeUserBalance = function (userId, moneyCount) {
 
 var User = mongoose.model('users', UserSchema);
 
+// User.remove({}, (res, err) => console.log(res, err));
+
 module.exports = User;

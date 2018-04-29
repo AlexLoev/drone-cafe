@@ -1,4 +1,5 @@
 const mongoose = require('./mongoose');
+const User = require('./users');
 const log = console.log;
 const Schema = mongoose.Schema;
 const ObjectID = mongoose.Types.ObjectID;
@@ -52,6 +53,16 @@ OrderSchema.statics.changestatus = function (orderid, status) {
         )
             .then(updated => {
                 log('item updated', updated);
+
+                if (status == 'подано' || status == 'возникли сложности' ) {
+                    setTimeout(() => {
+                        if (status == 'возникли сложности') {
+                            User.changeUserBalance(updated.userid, updated.price*updated.quant);
+                        }
+                        updated.remove();
+                    }, 120000);
+                }
+
                 resolve(updated);
             })
             .catch(err => { reject(err) });
@@ -92,6 +103,10 @@ OrderSchema.statics.itemsbystatus = function (status, userid) {
 };
 
 var Order = mongoose.model('orders', OrderSchema);
+
+
+
+// Order.remove({}, (res, err) => console.log(res, err));
 
 // var userid = "5acb9ca0bab0c610e0bb98e5"; //"alexloev@gmail.com"
 // var orderid = "5ad24fb10e36e90b5c62988a";

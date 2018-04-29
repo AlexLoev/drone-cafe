@@ -50,7 +50,7 @@ angular
                                     user.length ? 
                                         user[0].balance = res.data.balance
                                         : user.push(res.data);
-                                    toast('С возвращением ' + user[0].name, 2000);
+                                    toast('данные обновлены', 1000);
                                     resolve(user)
                                 } else {
                                     reject('Can not find user by ID '+userId)

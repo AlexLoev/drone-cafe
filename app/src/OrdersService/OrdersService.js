@@ -79,7 +79,8 @@ angular
                     if (userId) {
                         $http.get('users/' + userId + '/orders')
                             .then(res => {
-                                if (res.data) {
+                                console.log('getUserOrdersList', res);
+                                if (res.data != -1) {
                                     const NewItems = OrderItems.filter(item => { return !item._id });
                                     OrderItems.splice(0, OrderItems.length, ...res.data);
                                     OrderItems.unshift(...NewItems);
@@ -89,7 +90,8 @@ angular
                                     });
                                     resolve(res.data)
                                 } else {
-                                    reject('can not get orders')
+                                    OrderItems.splice(0, OrderItems.length);
+                                    UsersService.loaduser(userId)
                                 }
                             })
                             .catch(err => { reject(err) });
@@ -123,25 +125,31 @@ angular
                 return new Promise((resolve, reject) => {
                     if (orderId && status) {
                         //получаем индекс следующего статуса по порядку
-                        nextStatus = statuses.findIndex(item => item == status) + 1;
-                        console.log('nextStatus', nextStatus);
-                        if (nextStatus == 0 || nextStatus == statuses.length) {
-                            reject('can not go to next status, cause it is last or undifined')
-                        } else {
-                            $http.put('kitchen/orders/' + orderId, { status: statuses[nextStatus] })
-                                .then(res => {
-                                    if (res.data) {
-                                        resolve(res.data);
-                                    } else {
-                                        reject('can not changeOrderStatus');
-                                    }
-                                })
-                                .catch(err => { reject(err) });
-                        }
-                    } else {
-                        reject('changeOrderStatus params undifined');
+                        // nextStatus = statuses.findIndex(item => item == status) + 1;
+                        // console.log('nextStatus', nextStatus);
+                        // if (nextStatus == 0 || nextStatus == statuses.length) {
+                        //     reject('can not go to next status, cause it is last or undifined')
+                        // } else {
+                        $http.put('kitchen/orders/' + orderId, { status: status })
+                        //             .then(res => {
+                        //                 if (res.data) {
+                        //                     resolve(res.data);
+                        //                 } else {
+                        //                     reject('can not changeOrderStatus');
+                        //                 }
+                        //             })
+                        //             .catch(err => { reject(err) });
+                        //     }
+                        // } else {
+                        //     reject('changeOrderStatus params undifined');
                     }
                 });
+            },
+            cook(orderId) {
+                this.changeOrderStatus(orderId, statuses[1]);
+            },
+            deliver(orderId) {
+                this.changeOrderStatus(orderId, statuses[2]);
             }
         };
 

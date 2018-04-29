@@ -2,7 +2,7 @@
     <md-divider></md-divider>
     <md-content layout="column" layout-padding>
         <h1 class="md-display-1">Заказ</h1>
-        <div layout="row" layout-align="space-between" layout-wrap>
+        <div layout="row" layout-align="left" layout-wrap>
             <md-card flex="45" layout="column" ng-repeat="item in $ctrl.order" style="min-width: 170px; max-width: 170px;">
                 <md-card-header>
                     <md-card-avatar class="example-header-image">
@@ -24,7 +24,7 @@
 
                 <md-card-actions layout="column">
 
-                    <md-button class="md-raised md-warn" ng-click="$ctrl.removeItem(item.id)">Удалить</md-button>
+                    <md-button class="md-raised md-warn" ng-if="!item._id" ng-click="$ctrl.removeItem(item.id)">Удалить</md-button>
 
                 </md-card-actions>
 

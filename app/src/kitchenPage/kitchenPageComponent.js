@@ -13,13 +13,16 @@ CafeApp.component('kitchenPage', {
 
         $scope.changeListStatus = function (statusIdx) {
             $scope.status = statusIdx;
+            console.log('changeListStatus begin', ctrl.loaded);
             ctrl.loaded = false;
+            ctrl.actBtn = statusIdx ? "доставить" : "приготовить";
             OrdersService.getOrdersList(statusIdx)
                 .then(order => {
-                    ctrl.loaded = true;
-                    console.log('scope.changeListStatus', order);
+                    console.log('scope.getOrdersList resolve', order);
                     ctrl.order = order;
-                    $scope.$apply();
+                    ctrl.loaded = true;
+                    // console.log('changeListStatus end', ctrl.loaded); //todo если убираю логирование, то флаг остается false
+                    $scope.$apply(); //todo работает без этого, но почему-то не всегда. хорошо бы разобраться
                 })
                 .catch(reject => {
                     ctrl.loaded = true
@@ -27,24 +30,25 @@ CafeApp.component('kitchenPage', {
                 })
         }
 
-        ctrl.changeOrderStatus = function (orderId, status) {
-            OrdersService.changeOrderStatus(orderId, status)
-                .then(resolve => {
-                    var orderIdx = ctrl.order.findIndex(item => item._id == orderId);
-                    ctrl.order[orderIdx].hide = true;
-                    console.log('changeOrderStatus on resolve', resolve);
-                    $scope.changeListStatus($scope.status)
-                })
-                .catch(reject => {
-                    ctrl.loaded = true
-                    console.error(reject);
-                })
+        ctrl.changeOrderStatus = function (orderId) {
+            // .then(resolve => {
+            const orderIdx = ctrl.order.findIndex(item => item._id == orderId);
+            ctrl.order[orderIdx].hide = true;
+            $scope.status ? OrdersService.deliver(orderId) : OrdersService.cook(orderId);
+            //     console.log('changeOrderStatus on resolve', resolve);
+            //     $scope.changeListStatus($scope.status)
+            // })
+            // .catch(reject => {
+            //     ctrl.loaded = true
+            //     console.error(reject);
+            // })
 
         };
         $scope.status = 0;
+        ctrl.loaded = false;
         $scope.changeListStatus($scope.status);
-        
-        checkOrders = $interval(function() {
+
+        checkOrders = $interval(function () {
             console.log('interval orders');
             $scope.changeListStatus($scope.status);
         }, 10000);

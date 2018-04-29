@@ -1,5 +1,6 @@
 const express = require('express');
 const Order = require('../db/orders');
+const Drone = require('netology-fake-drone-api');
 const log = console.log;
 
 const routerkitchen = express.Router();
@@ -24,7 +25,13 @@ function getorderslist(req, res) {
 
 function changeorderstatus(req, res) {
     if (req.params.id) {
-        if (req.body.status) {
+        var status = req.body.status;
+        if (status) {
+            if (status == 'доставляется') {
+                Drone.deliver()
+                    .then(() => Order.changestatus(req.params.id, 'подано'))
+                    .catch(() => Order.changestatus(req.params.id, 'возникли сложности'));
+            }
             Order.changestatus(req.params.id, req.body.status)
                 .then(resolve => res.json(resolve))
                 .catch(err => _dberr(err, res));
